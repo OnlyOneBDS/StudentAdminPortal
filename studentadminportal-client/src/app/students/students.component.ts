@@ -12,7 +12,7 @@ import { StudentService } from '../services/student.service';
   styleUrls: ['./students.component.scss']
 })
 export class StudentsComponent implements OnInit {
-  displayedColumns: string[] = ['firstName', 'lastName', 'dateOfBirth', 'email', 'mobile', 'gender'];
+  displayedColumns: string[] = ['firstName', 'lastName', 'dateOfBirth', 'email', 'mobile', 'gender', 'edit'];
   students: Student[] = [];
   dataSource: MatTableDataSource<Student> = new MatTableDataSource<Student>();
   filterString = '';

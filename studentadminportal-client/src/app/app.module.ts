@@ -9,12 +9,14 @@ import { AppComponent } from './app.component';
 import { TopNavComponent } from './layout/top-nav/top-nav.component';
 import { MaterialModule } from './modules/material.module';
 import { StudentsComponent } from './students/students.component';
+import { StudentDetailsComponent } from './students/student-details/student-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TopNavComponent,
-    StudentsComponent
+    StudentsComponent,
+    StudentDetailsComponent
   ],
   imports: [
     BrowserModule,

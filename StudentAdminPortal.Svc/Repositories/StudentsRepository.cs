@@ -13,6 +13,11 @@ public class StudentsRepository : IStudentsRepository
     this.context = context;
   }
 
+  public async Task<Student> GetStudentAsync(Guid studentId)
+  {
+    return await context.Students.Include(nameof(Address)).Include(nameof(Gender)).FirstOrDefaultAsync(s => s.Id == studentId);
+  }
+
   public async Task<List<Student>> GetStudentsAsync()
   {
     return await context.Students.Include(nameof(Address)).Include(nameof(Gender)).ToListAsync();
