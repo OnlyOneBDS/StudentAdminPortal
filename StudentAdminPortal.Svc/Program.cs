@@ -10,6 +10,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
+builder.Services.AddCors((options) =>
+{
+  options.AddPolicy("AngularPolicy", (policy) =>
+  {
+    policy.WithOrigins("http://localhost:4200")
+      .AllowAnyHeader()
+      .WithMethods("DELETE", "GET", "POST", "PUT")
+      .WithExposedHeaders("*");
+  });
+});
+
 builder.Services.AddControllers();
 
 builder.Services.AddDbContext<StudentAdminContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("StudentAdminDb")));
@@ -30,6 +41,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AngularPolicy");
 
 app.UseAuthorization();
 
