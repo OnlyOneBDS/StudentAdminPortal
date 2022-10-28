@@ -22,4 +22,38 @@ public class StudentsRepository : IStudentsRepository
   {
     return await context.Students.Include(nameof(Address)).Include(nameof(Gender)).ToListAsync();
   }
+
+  public async Task<Student> UpdateStudentAsync(Guid studentId, Student student)
+  {
+    var studentToUpdate = await GetStudentAsync(studentId);
+
+    if (studentToUpdate != null)
+    {
+      studentToUpdate.FirstName = student.FirstName;
+      studentToUpdate.LastName = student.LastName;
+      studentToUpdate.DateOfBirth = student.DateOfBirth;
+      studentToUpdate.Email = student.Email;
+      studentToUpdate.Mobile = student.Mobile;
+      studentToUpdate.FirstName = student.FirstName;
+      studentToUpdate.GenderId = student.GenderId;
+      studentToUpdate.Address.PhysicalAddress = student.Address.PhysicalAddress;
+      studentToUpdate.Address.MailingAddress = student.Address.MailingAddress;
+
+      await context.SaveChangesAsync();
+
+      return studentToUpdate;
+    }
+
+    return null;
+  }
+
+  public async Task<List<Gender>> GetGendersAsync()
+  {
+    return await context.Genders.ToListAsync();
+  }
+
+  public async Task<bool> Exists(Guid studentId)
+  {
+    return await context.Students.AnyAsync(s => s.Id == studentId);
+  }
 }

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 
+import { Gender } from 'src/app/models/ui/gender.model';
 import { Student } from 'src/app/models/ui/student.model';
 import { StudentService } from 'src/app/services/student.service';
 
@@ -10,6 +12,7 @@ import { StudentService } from 'src/app/services/student.service';
   styleUrls: ['./student-details.component.scss']
 })
 export class StudentDetailsComponent implements OnInit {
+  genders: Gender[] = [];
   studentId: string | null | undefined;
   student: Student = {
     id: '',
@@ -31,7 +34,7 @@ export class StudentDetailsComponent implements OnInit {
     }
   };
 
-  constructor(private studentService: StudentService, private route: ActivatedRoute) { }
+  constructor(private studentService: StudentService, private route: ActivatedRoute, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.getStudent();
@@ -46,8 +49,19 @@ export class StudentDetailsComponent implements OnInit {
           this.studentService
             .getStudent(this.studentId)
             .subscribe({
-              next: (success) => {
-                this.student = success;
+              next: (student) => {
+                this.student = student;
+              },
+              error: (error) => {
+                console.log(error);
+              }
+            });
+
+          this.studentService
+            .getGenders()
+            .subscribe({
+              next: (genders) => {
+                this.genders = genders
               },
               error: (error) => {
                 console.log(error);
@@ -55,5 +69,19 @@ export class StudentDetailsComponent implements OnInit {
             });
         }
       })
+  }
+
+  onUpdate(): void {
+    this.studentService
+      .updateStudent(this.student.id, this.student)
+      .subscribe({
+        next: (resp) => {
+          // Show a notification
+          this.snackBar.open("Student info updated!", '', { duration: 3000 });
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      });
   }
 }
