@@ -58,6 +58,20 @@ public class StudentsController : BaseApiController
     return NotFound();
   }
 
+  [HttpDelete("{studentId:guid}")]
+  public async Task<IActionResult> DeleteStudentAsync(Guid studentId)
+  {
+    if (await studentsRepository.Exists(studentId))
+    {
+      // Delete the student
+      var deletedStudent = await studentsRepository.DeleteStudentAsync(studentId);
+
+      return Ok(mapper.Map<StudentDto>(deletedStudent));
+    }
+
+    return NotFound();
+  }
+
   [HttpGet("genders")]
   public async Task<IActionResult> GetGenders()
   {

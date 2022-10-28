@@ -47,6 +47,21 @@ public class StudentsRepository : IStudentsRepository
     return null;
   }
 
+  public async Task<Student> DeleteStudentAsync(Guid studentId)
+  {
+    var student = await GetStudentAsync(studentId);
+
+    if (student != null)
+    {
+      context.Students.Remove(student);
+      await context.SaveChangesAsync();
+
+      return student;
+    }
+
+    return null;
+  }
+
   public async Task<List<Gender>> GetGendersAsync()
   {
     return await context.Genders.ToListAsync();
