@@ -23,6 +23,14 @@ public class StudentsRepository : IStudentsRepository
     return await context.Students.Include(nameof(Address)).Include(nameof(Gender)).ToListAsync();
   }
 
+  public async Task<Student> AddStudentAsync(Student student)
+  {
+    var createdStudent = await context.Students.AddAsync(student);
+    await context.SaveChangesAsync();
+
+    return createdStudent.Entity;
+  }
+
   public async Task<Student> UpdateStudentAsync(Guid studentId, Student student)
   {
     var studentToUpdate = await GetStudentAsync(studentId);

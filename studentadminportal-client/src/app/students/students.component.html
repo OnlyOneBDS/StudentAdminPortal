@@ -7,6 +7,7 @@
   <div class="row end-xs">
     <div class="col-xs-12 mt-1">
       <input type="text" class="search-input" placeholder="Search Students" [(ngModel)]="filterString" (keyup)="filterStudents()" />
+      <a routerLink="/students/add" class="ms-1" mat-raised-button color="primary">Add New Student</a>
     </div>
   </div>
   <div class="mat-elevation-z8 mt-1">

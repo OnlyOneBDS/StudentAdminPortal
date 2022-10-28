@@ -12,6 +12,8 @@ import { StudentService } from 'src/app/services/student.service';
   styleUrls: ['./student-details.component.scss']
 })
 export class StudentDetailsComponent implements OnInit {
+  header = '';
+  isNewStudent = false;
   genders: Gender[] = [];
   studentId: string | null | undefined;
   student: Student = {
@@ -46,16 +48,27 @@ export class StudentDetailsComponent implements OnInit {
         this.studentId = params.get('id');
 
         if (this.studentId) {
-          this.studentService
-            .getStudent(this.studentId)
-            .subscribe({
-              next: (student) => {
-                this.student = student;
-              },
-              error: (error) => {
-                console.log(error);
-              }
-            });
+          // If the route contains 'Add'
+          // -> new Studnent
+          if (this.studentId.toLowerCase() === 'Add'.toLowerCase()) {
+            this.isNewStudent = true;
+            this.header = 'Add New Student';
+          }
+          else {
+            this.isNewStudent = false;
+            this.header = 'Edit Student';
+
+            this.studentService
+              .getStudent(this.studentId)
+              .subscribe({
+                next: (student) => {
+                  this.student = student;
+                },
+                error: (error) => {
+                  console.log(error);
+                }
+              });
+          }
 
           this.studentService
             .getGenders()
@@ -71,11 +84,28 @@ export class StudentDetailsComponent implements OnInit {
       })
   }
 
+  onAdd(): void {
+    this.studentService
+      .addStudent(this.student)
+      .subscribe({
+        next: (resp) => {
+          this.snackBar.open("Student added successfully!", '', { duration: 3000 });
+
+          setTimeout(() => {
+            this.router.navigateByUrl(`students/${resp.id}`);
+          }, 2000);
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      });
+  }
+
   onUpdate(): void {
     this.studentService
       .updateStudent(this.student.id, this.student)
       .subscribe({
-        next: (resp) => {
+        next: () => {
           // Show a notification
           this.snackBar.open("Student info updated!", '', { duration: 3000 });
         },
@@ -89,7 +119,7 @@ export class StudentDetailsComponent implements OnInit {
     this.studentService
       .deleteStudent(this.student.id)
       .subscribe({
-        next: (resp) => {
+        next: () => {
           this.snackBar.open("Student deleted successfully!", '', { duration: 3000 });
 
           setTimeout(() => {

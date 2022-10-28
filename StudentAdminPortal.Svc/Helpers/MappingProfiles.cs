@@ -12,5 +12,6 @@ public class MappingProfiles : Profile
     CreateMap<Gender, GenderDto>().ReverseMap();
     CreateMap<Student, StudentDto>().ReverseMap();
     CreateMap<UpdateStudentDto, Student>().AfterMap<UpdateStudentDtoAfterMap>();
+    CreateMap<AddStudentDto, Student>().AfterMap<AddStudentDtoAfterMap>();
   }
 }

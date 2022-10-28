@@ -25,9 +25,8 @@ public class StudentsController : BaseApiController
     return Ok(mapper.Map<List<Student>>(students));
   }
 
-  [HttpGet]
-  [Route("{studentId:guid}")]
-  public async Task<IActionResult> GetStudentAsync([FromRoute] Guid studentId)
+  [HttpGet("{studentId:guid}"), ActionName("GetStudentAsync")]
+  public async Task<IActionResult> GetStudentAsync(Guid studentId)
   {
     // Fetcth student details
     var student = await studentsRepository.GetStudentAsync(studentId);
@@ -39,6 +38,13 @@ public class StudentsController : BaseApiController
 
     // Return student
     return Ok(mapper.Map<Student>(student));
+  }
+
+  [HttpPost]
+  public async Task<IActionResult> AddStudentAsync([FromBody] AddStudentDto student)
+  {
+    var createdStudent = await studentsRepository.AddStudentAsync(mapper.Map<Student>(student));
+    return CreatedAtAction(nameof(GetStudentAsync), new { studentId = createdStudent.Id }, mapper.Map<Student>(createdStudent));
   }
 
   [HttpPut("{studentId:guid}")]

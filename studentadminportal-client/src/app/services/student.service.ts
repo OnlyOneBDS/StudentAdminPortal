@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import { AddStudent } from '../models/api/add-student.model';
 import { Gender } from '../models/api/gender.model';
 import { Student } from '../models/api/student.model';
 import { UpdateStudent } from '../models/api/update-student.model';
@@ -22,6 +23,21 @@ export class StudentService {
     return this.httpClient.get<Student>(this.baseUrl + '/students/' + studentId);
   }
 
+  addStudent(student: Student): Observable<Student> {
+    const studentToAdd: AddStudent = {
+      firstName: student.firstName,
+      lastName: student.lastName,
+      dateOfBirth: student.dateOfBirth,
+      email: student.email,
+      mobile: student.mobile,
+      genderId: student.genderId,
+      physicalAddress: student.address.physicalAddress,
+      mailingAddress: student.address.mailingAddress,
+    };
+
+    return this.httpClient.post<Student>(this.baseUrl + '/students', studentToAdd);
+  }
+
   updateStudent(studentId: string, student: Student): Observable<Student> {
     const studentToUpdate: UpdateStudent = {
       firstName: student.firstName,
@@ -32,7 +48,7 @@ export class StudentService {
       genderId: student.genderId,
       physicalAddress: student.address.physicalAddress,
       mailingAddress: student.address.mailingAddress,
-    }
+    };
 
     return this.httpClient.put<Student>(this.baseUrl + '/students/' + studentId, studentToUpdate);
   }
