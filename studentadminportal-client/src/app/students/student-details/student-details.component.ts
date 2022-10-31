@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -36,6 +37,8 @@ export class StudentDetailsComponent implements OnInit {
       mailingAddress: ''
     }
   };
+
+  @ViewChild('studentForm') studentForm?: NgForm;
 
   constructor(private studentService: StudentService, private route: ActivatedRoute, private snackBar: MatSnackBar, private router: Router) { }
 
@@ -89,34 +92,38 @@ export class StudentDetailsComponent implements OnInit {
   }
 
   onAdd(): void {
-    this.studentService
-      .addStudent(this.student)
-      .subscribe({
-        next: (resp) => {
-          this.snackBar.open("Student added successfully!", '', { duration: 3000 });
+    if (this.studentForm?.form.valid) {
+      this.studentService
+        .addStudent(this.student)
+        .subscribe({
+          next: (resp) => {
+            this.snackBar.open("Student added successfully!", '', { duration: 3000 });
 
-          setTimeout(() => {
-            this.router.navigateByUrl(`students/${resp.id}`);
-          }, 2000);
-        },
-        error: (error) => {
-          console.log(error);
-        }
-      });
+            setTimeout(() => {
+              this.router.navigateByUrl(`students/${resp.id}`);
+            }, 2000);
+          },
+          error: (error) => {
+            console.log(error);
+          }
+        });
+    }
   }
 
   onUpdate(): void {
-    this.studentService
-      .updateStudent(this.student.id, this.student)
-      .subscribe({
-        next: () => {
-          // Show a notification
-          this.snackBar.open("Student info updated!", '', { duration: 3000 });
-        },
-        error: (error) => {
-          console.log(error);
-        }
-      });
+    if (this.studentForm?.form.valid) {
+      this.studentService
+        .updateStudent(this.student.id, this.student)
+        .subscribe({
+          next: () => {
+            // Show a notification
+            this.snackBar.open("Student info updated!", '', { duration: 3000 });
+          },
+          error: (error) => {
+            console.log(error);
+          }
+        });
+    }
   }
 
   onDelete(): void {

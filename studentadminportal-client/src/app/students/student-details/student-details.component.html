@@ -19,13 +19,15 @@
           <div class="col-xs-6">
             <mat-form-field appearance="outline">
               <mat-label>First Name</mat-label>
-              <input type="text" name="firstName" matInput [(ngModel)]="student.firstName">
+              <input type="text" name="firstName" required matInput [(ngModel)]="student.firstName">
+              <mat-error>First Name is required</mat-error>
             </mat-form-field>
           </div>
           <div class="col-xs-6">
             <mat-form-field appearance="outline">
               <mat-label>Last Name</mat-label>
-              <input type="text" name="lastName" matInput [(ngModel)]="student.lastName">
+              <input type="text" name="lastName" required matInput [(ngModel)]="student.lastName">
+              <mat-error>Last Name is required</mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -33,18 +35,20 @@
           <div class="col-xs-6">
             <mat-form-field appearance="outline">
               <mat-label>Date of Birth</mat-label>
-              <input type="text" name="dateOfBirth" matInput [(ngModel)]="student.dateOfBirth" [matDatepicker]="picker" />
+              <input type="text" name="dateOfBirth" required matInput [(ngModel)]="student.dateOfBirth" [matDatepicker]="picker" />
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
+              <mat-error>Date of Birth is required</mat-error>
             </mat-form-field>
           </div>
           <div class="col-xs-6">
             <mat-form-field appearance="outline">
               <mat-label>Gender</mat-label>
               <!-- <input type="text" name="gender" matInput [(ngModel)]="student.gender.description" /> -->
-              <mat-select name="gnder" [(ngModel)]="student.genderId">
+              <mat-select name="gender" required [(ngModel)]="student.genderId">
                 <mat-option *ngFor="let gender of genders" [value]="gender.id">{{gender.description}}</mat-option>
               </mat-select>
+              <mat-error>Gender is required</mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -52,13 +56,15 @@
           <div class="col-xs-6">
             <mat-form-field appearance="outline">
               <mat-label>Email</mat-label>
-              <input type="email" name="email" matInput [(ngModel)]="student.email" />
+              <input type="email" name="email" required matInput [(ngModel)]="student.email" />
+              <mat-error>Email is required</mat-error>
             </mat-form-field>
           </div>
           <div class="col-xs-6">
             <mat-form-field appearance="outline">
               <mat-label>Mobile #</mat-label>
-              <input type="number" name="mobile" matInput [(ngModel)]="student.mobile" />
+              <input type="number" name="mobile" required matInput [(ngModel)]="student.mobile" />
+              <mat-error>Mobile is required</mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -66,7 +72,8 @@
           <div class="col-xs-12">
             <mat-form-field appearance="outline">
               <mat-label>Physical Address</mat-label>
-              <textarea rows="3" name="physicalAddress" matInput [(ngModel)]="student.address.physicalAddress"></textarea>
+              <textarea rows="3" name="physicalAddress" required matInput [(ngModel)]="student.address.physicalAddress"></textarea>
+              <mat-error>Physical Address is required</mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -74,7 +81,8 @@
           <div class="col-xs-12">
             <mat-form-field appearance="outline">
               <mat-label>Mailing Address</mat-label>
-              <textarea rows="3" name="mailingAddress" matInput [(ngModel)]="student.address.mailingAddress"></textarea>
+              <textarea rows="3" name="mailingAddress" required matInput [(ngModel)]="student.address.mailingAddress"></textarea>
+              <mat-error>Mailing Address is required</mat-error>
             </mat-form-field>
           </div>
         </div>
