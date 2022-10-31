@@ -12,9 +12,10 @@ import { StudentService } from 'src/app/services/student.service';
   styleUrls: ['./student-details.component.scss']
 })
 export class StudentDetailsComponent implements OnInit {
-  header = '';
-  isNewStudent = false;
   genders: Gender[] = [];
+  header = '';
+  displayImageUrl = '';
+  isNewStudent = false;
   studentId: string | null | undefined;
   student: Student = {
     id: '',
@@ -53,19 +54,21 @@ export class StudentDetailsComponent implements OnInit {
           if (this.studentId.toLowerCase() === 'Add'.toLowerCase()) {
             this.isNewStudent = true;
             this.header = 'Add New Student';
+            this.setImage();
           }
           else {
             this.isNewStudent = false;
             this.header = 'Edit Student';
-
             this.studentService
               .getStudent(this.studentId)
               .subscribe({
                 next: (student) => {
                   this.student = student;
+                  this.setImage();
                 },
                 error: (error) => {
                   console.log(error);
+                  this.setImage();
                 }
               });
           }
@@ -74,7 +77,8 @@ export class StudentDetailsComponent implements OnInit {
             .getGenders()
             .subscribe({
               next: (genders) => {
-                this.genders = genders
+                this.genders = genders;
+                this.setImage();
               },
               error: (error) => {
                 console.log(error);
@@ -130,5 +134,34 @@ export class StudentDetailsComponent implements OnInit {
           console.log(error);
         }
       })
+  }
+
+  uploadImage(event: any): void {
+    if (this.studentId) {
+      const file: File = event.target.files[0];
+
+      this.studentService
+        .uploadImage(this.student.id, file)
+        .subscribe({
+          next: (resp) => {
+            console.log(resp);
+            this.student.imageUrl = resp;
+            this.setImage();
+            this.snackBar.open('Image updated successfully!', '', { duration: 3000 });
+          },
+          error: (error) => {
+            console.log(error);
+          }
+        });
+    }
+  }
+
+  private setImage(): void {
+    if (this.student.imageUrl) {
+      this.displayImageUrl = this.studentService.getImage(this.student.imageUrl);
+    }
+    else {
+      this.displayImageUrl = '/assets/user.png';
+    }
   }
 }

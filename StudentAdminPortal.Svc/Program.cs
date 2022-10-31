@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using StudentAdminPortal.Svc.Data;
 using StudentAdminPortal.Svc.Helpers;
 using StudentAdminPortal.Svc.Interfaces;
@@ -29,6 +30,7 @@ builder.Services.AddDbContext<StudentAdminContext>(options => options.UseSqlServ
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<IStudentsRepository, StudentsRepository>();
 
 var app = builder.Build();
@@ -41,6 +43,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+  FileProvider = new PhysicalFileProvider(Path.Combine(builder.Environment.ContentRootPath, "Resources")),
+  RequestPath = "/api/Resources"
+});
 
 app.UseCors("AngularPolicy");
 

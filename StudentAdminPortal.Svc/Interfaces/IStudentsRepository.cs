@@ -12,5 +12,7 @@ public interface IStudentsRepository
 
   Task<List<Gender>> GetGendersAsync();
 
+  Task<bool> UpdateStudentImage(Guid studentId, string imageUrl);
+
   Task<bool> Exists(Guid studentId);
 }

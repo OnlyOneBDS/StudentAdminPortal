@@ -60,4 +60,16 @@ export class StudentService {
   getGenders(): Observable<Gender[]> {
     return this.httpClient.get<Gender[]>(this.baseUrl + '/students/genders');
   }
+
+  uploadImage(studentId: string, file: File): Observable<any> {
+    const formData = new FormData();
+
+    formData.append("imageFile", file);
+
+    return this.httpClient.post(this.baseUrl + '/students/upload-image/' + studentId, formData, { responseType: 'text' });
+  }
+
+  getImage(imageUrl: string) {
+    return `${this.baseUrl}/${imageUrl}`;
+  }
 }

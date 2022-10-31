@@ -75,6 +75,21 @@ public class StudentsRepository : IStudentsRepository
     return await context.Genders.ToListAsync();
   }
 
+  public async Task<bool> UpdateStudentImage(Guid studentId, string imageUrl)
+  {
+    var student = await GetStudentAsync(studentId);
+
+    if (student != null)
+    {
+      student.ImageUrl = imageUrl;
+      await context.SaveChangesAsync();
+
+      return true;
+    }
+
+    return false;
+  }
+
   public async Task<bool> Exists(Guid studentId)
   {
     return await context.Students.AnyAsync(s => s.Id == studentId);

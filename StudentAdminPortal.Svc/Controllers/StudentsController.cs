@@ -9,11 +9,13 @@ namespace StudentAdminPortal.Svc.Controllers;
 public class StudentsController : BaseApiController
 {
   private readonly IStudentsRepository studentsRepository;
+  private readonly IImageRepository imageRepository;
   private readonly IMapper mapper;
 
-  public StudentsController(IStudentsRepository studentsRepository, IMapper mapper)
+  public StudentsController(IStudentsRepository studentsRepository, IImageRepository imageRepository, IMapper mapper)
   {
     this.studentsRepository = studentsRepository;
+    this.imageRepository = imageRepository;
     this.mapper = mapper;
   }
 
@@ -89,5 +91,24 @@ public class StudentsController : BaseApiController
     }
 
     return Ok(mapper.Map<List<Gender>>(genders));
+  }
+
+  [HttpPost("upload-image/{studentId:guid}")]
+  public async Task<IActionResult> UploadImage(Guid studentId, IFormFile imageFile)
+  {
+    if (await studentsRepository.Exists(studentId))
+    {
+      var fileName = Guid.NewGuid() + Path.GetExtension(imageFile.FileName);
+      var imageUrl = await imageRepository.UploadImage(imageFile, fileName);
+
+      if (await studentsRepository.UpdateStudentImage(studentId, imageUrl))
+      {
+        return Ok(imageUrl);
+      }
+
+      return StatusCode(StatusCodes.Status500InternalServerError, "Error uploading image");
+    }
+
+    return NotFound();
   }
 }

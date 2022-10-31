@@ -1,3 +1,19 @@
 mat-form-field {
   width: 100%;
 }
+
+.image-container {
+  align-items: center;
+  background-color: #f7f7f7;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  display: flex;
+  height: 200px;
+  justify-content: center;
+  overflow: hidden;
+  width: 200px;
+}
+
+.image-container img {
+  width: 200px;
+}
